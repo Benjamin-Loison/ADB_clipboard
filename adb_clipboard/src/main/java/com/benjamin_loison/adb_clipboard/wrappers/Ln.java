@@ -1,4 +1,4 @@
-package com.example.mylibrary.wrappers;
+package com.benjamin_loison.adb_clipboard.wrappers;
 
 import android.util.Log;
 

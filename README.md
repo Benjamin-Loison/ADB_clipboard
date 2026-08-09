@@ -1,13 +1,25 @@
-从命令行获取粘贴板内容 支持adb&root
-成品在assets目录下
-将main.jar push到/data/local/tmp
+Push tool to Android device:
 
-查看粘贴板内容
-app_process64 -Djava.class.path=/data/local/tmp/main.jar /system/bin com.example.mylibrary.Main
+```bash
+adb push main.jar /data/local/tmp/
+```
 
-设置粘贴板内容
-app_process64 -Djava.class.path=/data/local/tmp/main.jar /system/bin com.example.mylibrary.Main "hello world"
+Get the clipboard content:
 
-启发
-https://github.com/wentiancanye/clipboardcli.git
-https://github.com/Genymobile/scrcpy.git
+```bash
+app_process64 -Djava.class.path=/data/local/tmp/main.jar /system/bin com.benjamin_loison.adb_clipboard.Main
+```
+
+Set clipboard content:
+
+```bash
+app_process64 -Djava.class.path=/data/local/tmp/main.jar /system/bin com.benjamin_loison.adb_clipboard.Main "hello world"
+```
+
+To compile:
+
+```bash
+./gradlew assembleDebug
+```
+
+`main.jar` in `adb_clipboard/src/main/assets/`.

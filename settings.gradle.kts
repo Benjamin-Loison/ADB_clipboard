@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AdbRootClipboard"
-include(":mylibrary")
+rootProject.name = "ADB_clipboard"
+include(":adb_clipboard")

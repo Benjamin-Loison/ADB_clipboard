@@ -10,8 +10,8 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mylibrary"
-    compileSdk = 33
+    namespace = "com.benjamin_loison.adb_clipboard"
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 23
@@ -55,7 +55,7 @@ android.libraryVariants.all {
             val pgConf = File(buildDir, "mainJar.pro")
 
             PrintStream(pgConf.outputStream()).use {
-                it.println("-keep class com.example.mylibrary.Main")
+                it.println("-keep class com.benjamin_loison.adb_clipboard.Main")
                 it.println("{ public static void main(java.lang.String[]); }")
             }
 

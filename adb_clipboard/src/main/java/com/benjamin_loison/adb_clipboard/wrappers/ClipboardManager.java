@@ -1,7 +1,6 @@
-package com.example.mylibrary.wrappers;
+package com.benjamin_loison.adb_clipboard.wrappers;
 
 import android.content.ClipData;
-import android.content.IOnPrimaryClipChangedListener;
 import android.os.Build;
 import android.os.IInterface;
 
@@ -12,10 +11,8 @@ public final class ClipboardManager {
     private final IInterface manager;
     private Method getPrimaryClipMethod;
     private Method setPrimaryClipMethod;
-    private Method addPrimaryClipChangedListener;
     private int getMethodVersion;
     private int setMethodVersion;
-    private int addListenerMethodVersion;
 
     public ClipboardManager(IInterface manager) {
         this.manager = manager;
@@ -137,65 +134,6 @@ public final class ClipboardManager {
             Method method = getSetPrimaryClipMethod();
             ClipData clipData = ClipData.newPlainText(null, text);
             setPrimaryClip(method, setMethodVersion, manager, clipData);
-            return true;
-        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            Ln.e("Could not invoke method", e);
-            return false;
-        }
-    }
-
-    private static void addPrimaryClipChangedListener(Method method, int methodVersion, IInterface manager, IOnPrimaryClipChangedListener listener)
-            throws InvocationTargetException, IllegalAccessException {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            method.invoke(manager, listener, FakeContext.PACKAGE_NAME);
-            return;
-        }
-
-        switch (methodVersion) {
-            case 0:
-                method.invoke(manager, listener, FakeContext.PACKAGE_NAME, FakeContext.ROOT_UID);
-                break;
-            case 1:
-                method.invoke(manager, listener, FakeContext.PACKAGE_NAME, null, FakeContext.ROOT_UID);
-                break;
-            default:
-                method.invoke(manager, listener, FakeContext.PACKAGE_NAME, null, FakeContext.ROOT_UID, 0);
-                break;
-        }
-    }
-
-    private Method getAddPrimaryClipChangedListener() throws NoSuchMethodException {
-        if (addPrimaryClipChangedListener == null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                addPrimaryClipChangedListener = manager.getClass()
-                        .getMethod("addPrimaryClipChangedListener", IOnPrimaryClipChangedListener.class, String.class);
-            } else {
-                try {
-                    addPrimaryClipChangedListener = manager.getClass()
-                            .getMethod("addPrimaryClipChangedListener", IOnPrimaryClipChangedListener.class, String.class, int.class);
-                    addListenerMethodVersion = 0;
-                } catch (NoSuchMethodException e1) {
-                    try {
-                        addPrimaryClipChangedListener = manager.getClass()
-                                .getMethod("addPrimaryClipChangedListener", IOnPrimaryClipChangedListener.class, String.class, String.class,
-                                        int.class);
-                        addListenerMethodVersion = 1;
-                    } catch (NoSuchMethodException e2) {
-                        addPrimaryClipChangedListener = manager.getClass()
-                                .getMethod("addPrimaryClipChangedListener", IOnPrimaryClipChangedListener.class, String.class, String.class,
-                                        int.class, int.class);
-                        addListenerMethodVersion = 2;
-                    }
-                }
-            }
-        }
-        return addPrimaryClipChangedListener;
-    }
-
-    public boolean addPrimaryClipChangedListener(IOnPrimaryClipChangedListener listener) {
-        try {
-            Method method = getAddPrimaryClipChangedListener();
-            addPrimaryClipChangedListener(method, addListenerMethodVersion, manager, listener);
             return true;
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             Ln.e("Could not invoke method", e);

@@ -1,17 +1,17 @@
-package com.example.mylibrary;
+package com.benjamin_loison.adb_clipboard;
 
 import android.os.Process;
 import android.system.ErrnoException;
 import android.system.Os;
 
-import com.example.mylibrary.wrappers.ClipboardManager;
-import com.example.mylibrary.wrappers.ServiceManager;
+import com.benjamin_loison.adb_clipboard.wrappers.ClipboardManager;
+import com.benjamin_loison.adb_clipboard.wrappers.ServiceManager;
 
 public class Main {
     public static final int SHELL_UID = 2000;
 
     public static void main(String[] args) {
-        //为root用户设置uid为shell用户
+        // Set the UID of the `root` user to that of the `shell` user
         if (Os.getuid() == 0) {
             try {
                 Os.seteuid(SHELL_UID);
@@ -32,7 +32,7 @@ public class Main {
             }
             boolean res = manager.setText(text.substring(0, text.length() - 1));
             if (res) {
-                System.out.println("Successed");
+                System.out.println("Succeeded");
             } else {
                 System.out.println("Failed");
             }
